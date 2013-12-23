@@ -23,9 +23,10 @@ public class Request {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getQueryString() {
+	protected String getQueryString() {
 		return queryString;
 	}
+
 	public void setQueryString(String queryString) {
 		this.queryString = queryString;
 	}

@@ -14,7 +14,7 @@ public class TestClient {
 	@Test
 	public void testClient() throws IOException {
 		Client c = new Client();
-		c.post("HaHa");
+		c.post("HaHa","gaoshen");
 	}
 	
 	@Test
@@ -26,6 +26,12 @@ public class TestClient {
 		String property = sc.next();
 		String serial = sc.next();
 		System.out.println(property + ": " + serial);
+	}
+	
+	@Test
+	public void test1(){
+		Client c = new Client();
+		System.out.println(c.getCPUID());
 	}
 
 }

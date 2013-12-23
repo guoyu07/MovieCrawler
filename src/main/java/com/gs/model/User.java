@@ -3,6 +3,10 @@ package com.gs.model;
 public class User {
 	private String username;
 	private String cpuid;
+	public User(String username, String cpuid) {
+		this.username = username;
+		this.cpuid = cpuid;
+	}
 	public String getUsername() {
 		return username;
 	}

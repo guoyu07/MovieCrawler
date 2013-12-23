@@ -1,5 +1,7 @@
 package com.gs.DAO;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.log4j.Logger;
 
 /**
  * @author gaoshen
@@ -17,10 +20,11 @@ import org.apache.commons.dbcp.BasicDataSource;
  *         该类需要有个地方来初始化 DS ，通过调用initDS
  *         方法来完成，可以在通过调用带参数的构造函数完成调用，可以在其它类中调用，也可以在本类中加一个static{}来完成；
  */
-public final class DbcpBean {
+public final class DbcpBean implements Closeable{
+	private static Logger logger = Logger.getLogger(DbcpBean.class);
 	private static DbcpBean dbcpBean = null;
 
-	/** 数据源，static */
+	/** 数据源,static */
 	private static DataSource DS;
 
 	/** 获得数据源连接状态 */
@@ -79,12 +83,14 @@ public final class DbcpBean {
 		ds.setMaxIdle(maxIdle);
 		ds.setMaxWait(maxWait);
 		DS = ds;
+		logger.info("数据源初始化完成");
 	}
 
 	/** 关闭数据源 */
 	protected static void shutdownDataSource() throws SQLException {
 		BasicDataSource bds = (BasicDataSource) DS;
 		bds.close();
+		logger.info("数据源正常关闭");
 	}
 
 	/** 默认的构造函数 */
@@ -106,23 +112,30 @@ public final class DbcpBean {
 
 	/** 从数据源获得一个连接 */
 	protected Connection getConn() {
-
 		try {
 			return DS.getConnection();
 		} catch (SQLException e) {
-			System.out.println("获得连接出错！");
+			logger.error("获得连接出错！");
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	protected synchronized DbcpBean getInstance() {
+	protected synchronized static DbcpBean getInstance() {
 		if (dbcpBean == null) {
 			dbcpBean = new DbcpBean("jdbc:mysql://localhost:3306/movie");
 		}
 		return dbcpBean;
 	}
 
+	public void close() throws IOException {
+		try {
+			shutdownDataSource();
+		} catch (SQLException e) {
+			logger.error("数据源关闭出现错误"+e.getMessage());
+			e.printStackTrace();
+		}
+	}
 	public static void main(String[] args) {
 		DbcpBean db = new DbcpBean("jdbc:mysql://localhost:3306/movie");
 
@@ -160,5 +173,7 @@ public final class DbcpBean {
 			}
 		}
 	}
+
+	
 
 }
