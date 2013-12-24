@@ -2,4 +2,4 @@
  * @author GS
  *
  */
-package com.gs.crawler;
+package com.gs.DAO;
