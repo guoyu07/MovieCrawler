@@ -23,7 +23,6 @@ public class UserDAO {
 		try {
 			stmt = connection.createStatement();
 			String sql = "select * from user where cpuid = \"" + cpuid+"\"";
-			logger.debug(sql);
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				user  = new User(rs.getString("username"),rs.getString("cpuid"));
@@ -33,6 +32,24 @@ public class UserDAO {
 			e.printStackTrace();
 		}
 		return user;
+	}
+	
+	public boolean checkUserWithCpuid(String cpuid){
+		Statement stmt = null;
+		ResultSet rs = null;
+		int count = 0;
+		try {
+			stmt = connection.createStatement();
+			String sql = "select count(*) from user where cpuid = \"" + cpuid+"\"";
+			rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return (count == 0) ? false : true;
 	}
 
 }

@@ -14,7 +14,7 @@ public class TestClient {
 	@Test
 	public void testClient() throws IOException {
 		Client c = new Client();
-		c.post("HaHa","gaoshen");
+		c.post("HaHa","aas");
 	}
 	
 	@Test

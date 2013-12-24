@@ -1,27 +1,24 @@
 package com.gs.socket;
 
-import java.util.Set;
-
-import com.gs.searcher.Hit;
 
 public class Response {
-	public Response(Set<Hit> resultSet, int statusCode) {
-		this.resultSet = resultSet;
-		this.statusCode = statusCode;
-	}
+	private String json;
+	private int statusCode;
 	
 	public Response() {
 	}
-
-	private Set<Hit> resultSet;
-	private int statusCode;
 	
-	public Set<Hit> getResultSet() {
-		return resultSet;
+	public Response(String json, int statusCode) {
+		this.json = json;
+		this.statusCode = statusCode;
 	}
 
-	public void setResultSet(Set<Hit> resultSet) {
-		this.resultSet = resultSet;
+	public String getJson() {
+		return json;
+	}
+
+	protected void setJson(String json) {
+		this.json = json;
 	}
 
 	public int getStatusCode() {

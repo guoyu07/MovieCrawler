@@ -13,6 +13,7 @@ public class RequestProcesser {
 
 	private static boolean validate(Request req) {
 		UserDAO userDAO = new UserDAO();
+		if(!userDAO.checkUserWithCpuid(req.getCpuid())) return false;
 		User user = userDAO.getUser(req.getCpuid());
 		if (user.getUsername().equals(req.getUsername()))
 			return true;

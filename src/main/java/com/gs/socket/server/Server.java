@@ -34,16 +34,15 @@ public class Server {
 				DataInputStream dis = new DataInputStream(
 						socket.getInputStream());
 				String json = dis.readUTF();
-				logger.debug(json);
-				System.out.println(json);
+				Request req = null;
 				try {
-					System.out.println(RequestProcesser.getQueryString(new Gson().fromJson(json, Request.class)));
+					req = new Gson().fromJson(json, Request.class);
+					System.out.println(RequestProcesser.getQueryString(req));
 				} catch (Exception e) {
-					logger.error(e.getMessage());
-					e.printStackTrace();
+					logger.error(e.getMessage()+" 用户名:"+req.getUsername()+" IP:"+socket.getInetAddress().getHostAddress()+" Port:"+socket.getPort());
 				}
 				// 服务器向客户端发送连接成功确认信息
-				dos.writeUTF(new Gson().toJson(new Response(new HashSet<Hit>(),200)));
+				dos.writeUTF(new Gson().toJson(new Response("RESULT",200)));
 				// 不需要继续使用此连接时，关闭连接
 				socket.close();
 				// ss.close();

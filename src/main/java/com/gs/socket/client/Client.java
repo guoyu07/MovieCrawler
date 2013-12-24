@@ -28,6 +28,7 @@ public class Client {
 			dos.writeUTF(new Gson().toJson(new Request(getCPUID(), username, query)));
 			// 打印出从服务器端接收到的数据
 			Response resp = new Gson().fromJson(dis.readUTF(), Response.class);
+			System.out.println(resp.getStatusCode()+resp.getJson());
 			// 不需要继续使用此连接时，记得关闭哦
 			socket.close();
 		} catch (UnknownHostException e) {
