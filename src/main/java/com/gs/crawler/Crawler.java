@@ -1,9 +1,49 @@
 package com.gs.crawler;
 
-public class Crawler implements Runnable{
-	
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+import com.gs.DAO.MovieDAO;
+import com.gs.crawler.extractor.Extractor;
+import com.gs.model.Movie;
+
+public class Crawler implements Runnable {
+	private final String server;
+	private final File input;
+
 	public void run() {
-		
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(input));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		String page = "";
+		MovieDAO dao = new MovieDAO();
+		try {
+			while ((page = br.readLine()) != null) {
+				Movie movie = null;
+				String html = "";
+				try {
+					html = WebPageDownloader.down(server, page);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				movie = Extractor.extract(html);
+				movie.setUrl(server + page);
+				dao.save(movie);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Crawler(String server, File input) {
+		this.server = server;
+		this.input = input;
 	}
 
 }
