@@ -6,11 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import com.gs.DAO.MovieDAO;
 import com.gs.crawler.extractor.Extractor;
 import com.gs.model.Movie;
 
 public class Crawler implements Runnable {
+	private Logger logger = Logger.getLogger(this.getClass());
 	private final String server;
 	private final File input;
 
@@ -38,6 +41,19 @@ public class Crawler implements Runnable {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				dao.close();
+			} catch (IOException e) {
+				logger.error("MovieDAO关闭错误"+e.getMessage());
+				e.printStackTrace();
+			}
+			try {
+				br.close();
+			} catch (IOException e) {
+				logger.error("BufferedReader关闭错误"+e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 

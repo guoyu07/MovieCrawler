@@ -5,14 +5,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.gs.searcher.Hit;
 import com.gs.socket.Request;
 import com.gs.socket.RequestProcesser;
 import com.gs.socket.Response;
@@ -33,11 +30,11 @@ public class Server {
 				// 用于接收客户端发来的数据的输入流
 				DataInputStream dis = new DataInputStream(
 						socket.getInputStream());
-				String json = dis.readUTF();
+				String json = dis.readUTF();//接收客户端传过来的Json格式的Request
 				Request req = null;
 				try {
-					req = new Gson().fromJson(json, Request.class);
-					System.out.println(RequestProcesser.getQueryString(req));
+					req = new Gson().fromJson(json, Request.class);//从Json格式转换成一个response实例
+					System.out.println(RequestProcesser.getQueryString(req));//TODO:处理QueryString
 				} catch (Exception e) {
 					logger.error(e.getMessage()+" 用户名:"+req.getUsername()+" IP:"+socket.getInetAddress().getHostAddress()+" Port:"+socket.getPort());
 				}
@@ -45,7 +42,6 @@ public class Server {
 				dos.writeUTF(new Gson().toJson(new Response("RESULT",200)));
 				// 不需要继续使用此连接时，关闭连接
 				socket.close();
-				// ss.close();
 			}
 		} catch (IOException e) {
 			logger.error(e.getMessage());

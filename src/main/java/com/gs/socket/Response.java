@@ -4,6 +4,7 @@ package com.gs.socket;
 public class Response {
 	private String json;
 	private int statusCode;
+	private String jsonClassName;
 	
 	public Response() {
 	}
@@ -27,5 +28,13 @@ public class Response {
 
 	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
+	}
+
+	public String getJsonClassName() {
+		return jsonClassName;
+	}
+
+	public void setJsonClassName(String jsonClassName) {
+		this.jsonClassName = jsonClassName;
 	}
 }
