@@ -1,34 +1,30 @@
-package com.gs.socket;
+package com.gs.socket.request;
 
-public class Request {
+public class RequestProperty {
 	private String cpuid;
 	private String username;
-	private String queryString;
-	
-	public Request(String cpuid, String username, String queryString) {
+
+	public RequestProperty(String cpuid, String username) {
 		this.cpuid = cpuid;
 		this.username = username;
-		this.queryString = queryString;
 	}
-	
+
 	public String getCpuid() {
 		return cpuid;
 	}
+
 	public void setCpuid(String cpuid) {
 		this.cpuid = cpuid;
 	}
+
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	protected String getQueryString() {
-		return queryString;
-	}
 
-	public void setQueryString(String queryString) {
-		this.queryString = queryString;
-	}
 	
+
 }

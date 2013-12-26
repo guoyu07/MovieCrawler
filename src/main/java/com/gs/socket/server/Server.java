@@ -10,9 +10,9 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.gs.socket.Request;
-import com.gs.socket.RequestProcesser;
-import com.gs.socket.Response;
+import com.gs.socket.request.RequestDTO;
+import com.gs.socket.request.RequestDTOProcesser;
+import com.gs.socket.response.Response;
 
 public class Server {
 	private Logger logger = Logger.getLogger(this.getClass());
@@ -30,13 +30,14 @@ public class Server {
 				// 用于接收客户端发来的数据的输入流
 				DataInputStream dis = new DataInputStream(
 						socket.getInputStream());
-				String json = dis.readUTF();//接收客户端传过来的Json格式的Request
-				Request req = null;
+				String json = dis.readUTF();//接收客户端传过来的Json格式的RequestDTO
+				RequestDTO dto = null;
 				try {
-					req = new Gson().fromJson(json, Request.class);//从Json格式转换成一个response实例
-					System.out.println(RequestProcesser.getQueryString(req));//TODO:处理QueryString
+					dto = new Gson().fromJson(json, RequestDTO.class);//从Json格式转换成一个response实例
+					System.out.println(RequestDTOProcesser.unpack(dto));//TODO:处理QueryString
 				} catch (Exception e) {
-					logger.error(e.getMessage()+" 用户名:"+req.getUsername()+" IP:"+socket.getInetAddress().getHostAddress()+" Port:"+socket.getPort());
+					logger.error(e.getMessage()+" 用户名:"+dto.getProperty().getUsername()+" IP:"+socket.getInetAddress().getHostAddress()+" Port:"+socket.getPort());
+					dos.writeUTF(new Gson().toJson(new Response("Forbiden",403)));
 				}
 				// 服务器向客户端发送连接成功确认信息
 				dos.writeUTF(new Gson().toJson(new Response("RESULT",200)));

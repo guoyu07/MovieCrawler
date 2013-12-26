@@ -1,6 +1,5 @@
 package com.gs.socket;
 
-import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -8,15 +7,10 @@ import java.util.Scanner;
 import org.junit.Test;
 
 import com.gs.socket.client.Client;
+import com.gs.socket.request.SearchRequset;
 
 public class TestClient {
 
-	@Test
-	public void testClient() throws IOException {
-		Client c = new Client();
-		c.post("HaHa","aas");
-	}
-	
 	@Test
 	public void testID() throws IOException{
 		Process process = Runtime.getRuntime().exec(
@@ -29,9 +23,9 @@ public class TestClient {
 	}
 	
 	@Test
-	public void test1(){
+	public void test1() throws IOException{
 		Client c = new Client();
-		System.out.println(c.getCPUID());
+		c.post(new SearchRequset("111"), "gashen");
 	}
 
 }
