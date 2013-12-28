@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -31,11 +33,11 @@ public class MovieDAO implements Closeable{
 		}
 	}
 	
-	public boolean checkMovieWithID(int id){
+	public boolean checkMovieWithURL(String url){
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			String sql = "select count(*) from movie where id = "+id+";";
+			String sql = "select count(*) from movie where url = \""+url+"\";";
 			stmt = (Statement) connection.createStatement(); // 创建用于执行静态sql语句的Statement对象
 			rs = stmt.executeQuery(sql);
 			if(rs.next()){return rs.getInt("count(*)") == 0 ? false :true;}
@@ -55,41 +57,41 @@ public class MovieDAO implements Closeable{
 		
 	}
 	
-	public Iterator<Movie> getIterator(){
-		Iterator<Movie> iterator = new Iterator<Movie>() {
-			private int i = 36;
-			public boolean hasNext() {
-				return checkMovieWithID(i);
-			}
-
-			public Movie next() {
-				getMovie(i++);
-				return null;
-			}
-
-
-			public void remove() {}
-		};
-		return iterator;
-		
-	}
-	public Movie getMovie(int id) {
+	public Movie getMovie(String url) {
 		Statement stmt = null;
 		ResultSet rs = null;
 		Movie movie = null;
 		try {
-			String sql = "select * from movie where id = "+id+";";
+			String sql = "select * from movie where url = \""+url+"\";";
 			stmt = (Statement) connection.createStatement(); // 创建用于执行静态sql语句的Statement对象
 			rs = stmt.executeQuery(sql);
 			if(rs.next()){
 				movie  = new Movie(rs.getString("url"),rs.getString("name"),rs.getString("qvod"),rs.getString("category"));
-				movie.setId(id);
 			}
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 		return movie;
+	}
+	
+	public Set<Movie> getMovies(){
+		Set<Movie> set = new HashSet<Movie>();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			String sql = "select * from movie;";
+			stmt = (Statement) connection.createStatement(); // 创建用于执行静态sql语句的Statement对象
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				Movie movie  = new Movie(rs.getString("url"),rs.getString("name"),rs.getString("qvod"),rs.getString("category"));
+				set.add(movie);
+			}
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return set;
 	}
 	
 

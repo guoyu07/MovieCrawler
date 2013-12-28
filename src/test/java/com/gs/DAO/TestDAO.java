@@ -16,10 +16,5 @@ public class TestDAO {
 		System.out.println(dao2.checkUserWithCpuid("111"));
 	}
 	
-	@Test
-	public void testMovieDAOCheck(){
-		MovieDAO dao = new MovieDAO();
-		System.out.println(dao.getMovie(1));
-	}
 
 }

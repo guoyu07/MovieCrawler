@@ -10,7 +10,7 @@ import java.net.Socket;
 
 public class WebPageDownloader {
 	private static final int PORT = 80;
-	protected static final String down(String strServer,String strPage) throws IOException{
+	protected static final String down(final String strServer,final String strPage) throws IOException{
 		// 用域名反向获得IP地址
 		InetAddress addr = InetAddress.getByName(strServer);
 		// 建立一个Socket

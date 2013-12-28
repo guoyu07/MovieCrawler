@@ -42,7 +42,7 @@ public class Searcher {
 				Movie movie = new Movie();
 				Document d = seacher.doc(sd.doc);
 				movie.setName(d.get("name"));
-				movie.setId(Integer.valueOf(d.get("id")));
+				movie.setUrl(d.get("url"));
 				hits.add(movie);
 			}
 			seacher.close();

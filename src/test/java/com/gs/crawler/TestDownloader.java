@@ -28,13 +28,13 @@ public class TestDownloader {
 
 	@Test
 	public void test1() throws UnknownHostException, IOException {
-		String strServer = "";//TODO
+		String strServer = "www.611zy.com";//TODO
 		FileWriter fw = null;
 		// 起始页面，/为根页
 		try {
-			File file = new File("D://Test//omei.data");
+			File file = new File("D://Test//linglei.data");
 			fw = new FileWriter(file, true);
-			for (int i = 2; i <= 78; i++) {
+			for (int i = 2; i <= 28; i++) {
 				// 设置端口，通常http端口不就是80罗，你在地址栏上没输就是这个值
 				int port = 80;
 				// 用域名反向获得IP地址
@@ -45,7 +45,7 @@ public class TestDownloader {
 				// 发送命令,无非就是在Socket发送流的基础上加多一些握手信息，详情请了解HTTP协议
 				wr = new BufferedWriter(new OutputStreamWriter(
 						socket.getOutputStream(), "utf8"));
-				String strPage = "/list/index2_" + String.valueOf(i) + ".html";
+				String strPage = "/list/index8_" + String.valueOf(i) + ".html";
 				System.out.println(strPage);
 				wr.write("GET " + strPage + " HTTP/1.0\r\n");
 				wr.write("HOST:" + strServer + "\r\n");
@@ -87,62 +87,6 @@ public class TestDownloader {
 		return set;
 	}
 
-	@Test
-	public void test2() throws UnknownHostException, IOException {
-		String strServer = "";//TODO
-		// 起始页面，/为根页
-		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"D://Test//yazhou.data")));
-		String page = "";
-		MovieDAO dao = new MovieDAO();
-		int i = 0;
-		while ((page = br.readLine()) != null) {
-			// 设置端口，通常http端口不就是80罗，你在地址栏上没输就是这个值
-			int port = 80;
-			// 用域名反向获得IP地址
-			InetAddress addr = InetAddress.getByName(strServer);
-			// 建立一个Socket
-			Socket socket = null;
-			try {
-				socket = new Socket(addr, port);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			BufferedWriter wr = null;
-			// 发送命令,无非就是在Socket发送流的基础上加多一些握手信息，详情请了解HTTP协议
-			wr = new BufferedWriter(new OutputStreamWriter(
-					socket.getOutputStream(), "utf8"));
-			String strPage = "/view/" + page;
-			System.out.println(i++ + "\t" + strPage);
-			wr.write("GET " + strPage + " HTTP/1.0\r\n");
-			wr.write("HOST:" + strServer + "\r\n");
-			wr.write("Accept:*/*\r\n");
-			wr.write("\r\n");
-			wr.flush();
-			// 接收Socket返回的结果,并打印出来
-			DataInputStream dis = new DataInputStream(socket.getInputStream());
-			String line;
-			StringBuffer sb = new StringBuffer();
-			while ((line = dis.readLine()) != null) {
-				sb.append(new String(line.getBytes("iso8859-1"), "gb2312"));
-			}
-			dao.save(new Movie(strServer + strPage,
-					titleProcess(sb.toString()), qvodProcess(sb.toString()),
-					categoryProcess(sb.toString())));
-			wr.close();
-			socket.close();
-		}
-		br.close();
-
-	}
-
-	@Test
-	public void test3() throws IOException {
-		String s = FileUtils.readFileToString(new File("D://Test//html.txt"),
-				"gb2312");
-		System.out.println(qvodProcess(s));
-	}
-
 	public String qvodProcess(String html) {
 		String qvod = "";
 		String regex = "qvod://(.*?)</a>";
@@ -175,17 +119,13 @@ public class TestDownloader {
 		}
 		return category;
 	}
-
-	@Test
-	public void testDAO() {
-		MovieDAO d = new MovieDAO();
-		Movie m = new Movie("1", "2", "3", "7");
-		d.save(m);
-	}
 	
 	@Test
-	public void testWebPageDownloader() throws IOException{
-		WebPageDownloader d = new WebPageDownloader();
-		System.out.println(d.down("", "/"));//TODO
+	public void testCategoryCrawler() throws IOException{
+		CategoryCrawler c = new CategoryCrawler();
+		c.crawl();
 	}
+
+	
+	
 }

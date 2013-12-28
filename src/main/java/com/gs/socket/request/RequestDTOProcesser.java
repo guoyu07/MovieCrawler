@@ -6,7 +6,6 @@ import com.gs.DAO.UserDAO;
 import com.gs.model.User;
 
 public class RequestDTOProcesser {
-	private static final UserDAO userDAO = new UserDAO();
 	public static final RequestDTO pack(Request req,RequestProperty property) {
 		String json = new Gson().toJson(req);
 		String jsonClassName = req.getClass().getName();
@@ -21,6 +20,7 @@ public class RequestDTOProcesser {
 	}
 	
 	public static final boolean validate(RequestDTO dto) {
+		final UserDAO userDAO = new UserDAO();
 		if(!userDAO.checkUserWithCpuid(dto.getProperty().getCpuid())) return false;
 		User user = userDAO.getUser(dto.getProperty().getCpuid());
 		if (user.getUsername().equals(dto.getProperty().getUsername()))

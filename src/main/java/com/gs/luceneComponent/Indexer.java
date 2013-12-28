@@ -3,6 +3,7 @@ package com.gs.luceneComponent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
@@ -38,22 +39,14 @@ public class Indexer {
 			Document doc;
 			dao = new MovieDAO();
 			int count = 0;
-			int i = 36;
-			while (true) {
+			Set<Movie> set = dao.getMovies();
+			for (Movie movie : set) {
 				doc = new Document();
-				Movie movie = dao.getMovie(i++);
-				if (movie == null) {
-					count++;
-					logger.error("skip  "+i+"   "+count);
-					if (count > 4)
-						break;
-					continue;
-				}
-				logger.debug("Index " + movie.getId() + "  " + movie.getName());
+				logger.debug(count++ + "  Index " + movie.getName());
 				doc.add(new Field("name", movie.getName(), Field.Store.NO,
 						Field.Index.ANALYZED));
-				doc.add(new NumericField("id", Field.Store.YES, false)
-						.setLongValue(movie.getId()));
+				doc.add(new Field("url", movie.getUrl(), Field.Store.YES,
+						Field.Index.NOT_ANALYZED));
 				writer.addDocument(doc);
 			}
 		} catch (CorruptIndexException e) {

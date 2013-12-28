@@ -1,9 +1,9 @@
 package com.gs.socket.request;
 
-public class SearchRequset implements Request{
+public class SearchRequest implements Request{
 	private String queryString;
 	
-	public SearchRequset(String queryString) {
+	public SearchRequest(String queryString) {
 		this.queryString = queryString;
 	}
 

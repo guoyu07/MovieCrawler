@@ -14,8 +14,8 @@ public class TestSearcher {
 	public void test() throws IOException{
 		Searcher s = new Searcher();
 		MovieDAO dao = new MovieDAO();
-		for(Movie m : s.search("Test", 99)){
-			System.out.println(dao.getMovie(m.getId()));
+		for(Movie m : s.search("中出", 99)){
+			System.out.println(dao.getMovie(m.getUrl()));
 		}
 		dao.close();
 	}
