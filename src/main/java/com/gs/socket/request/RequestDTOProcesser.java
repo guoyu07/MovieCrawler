@@ -14,7 +14,7 @@ public class RequestDTOProcesser {
 	}
 	
 	public static final Request unpack(RequestDTO dto) throws JsonSyntaxException, ClassNotFoundException,Exception{
-		if(validate(dto))
+		if(validate(dto)||dto.getJsonClassName().equals("com.gs.socket.request.RegistRequest"))
 		return (Request) new Gson().fromJson(dto.getJson(), Class.forName(dto.getJsonClassName()));
 		else {throw new Exception("身份验证未通过");}
 	}

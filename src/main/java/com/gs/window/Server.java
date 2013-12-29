@@ -20,6 +20,7 @@ import java.io.IOException;
 public class Server {
 
 	private JFrame frame;
+	private final com.gs.socket.server.Server s = new com.gs.socket.server.Server();
 
 	/**
 	 * Launch the application.
@@ -61,7 +62,7 @@ public class Server {
 		tabbedPane.addTab("启动", null, panel, null);
 		panel.setLayout(null);
 		JButton btnNewButton = new JButton("start");
-		btnNewButton.setBounds(156, 10, 93, 23);
+		btnNewButton.setBounds(63, 10, 93, 23);
 		panel.add(btnNewButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -70,11 +71,22 @@ public class Server {
 		final JTextArea textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
 		
+		JButton btnStop = new JButton("Stop");
+		btnStop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					s.stop();
+				} catch (IOException e) {
+					textArea.append(e.getMessage());
+				}
+			}
+		});
+		btnStop.setBounds(244, 10, 93, 23);
+		panel.add(btnStop);
+		
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				final com.gs.socket.server.Server s = new com.gs.socket.server.Server();
 				s.setTextArea(textArea);
-				
 				Thread thread = new Thread(new Runnable() {
 					public void run() {
 						try {
@@ -90,11 +102,7 @@ public class Server {
 				});
 				thread.start();
 				textArea.append("启动\n");
-				
 			}
 		});
-		
-		
-		
 	}
 }

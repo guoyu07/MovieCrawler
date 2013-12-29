@@ -14,7 +14,7 @@ import com.gs.model.Movie;
 public class CategoryCrawler {
 	public void crawl() throws IOException{
 		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"D://Test//linglei.data")));
+				"D://Test//zhifu.data")));
 		String line;
 		MovieDAO dao = new MovieDAO();
 		int i = 0;
@@ -22,12 +22,12 @@ public class CategoryCrawler {
 			String html;
 			System.out.println(i++);
 			try {
-				html = WebPageDownloader.down("www.611zy.com", "/view/" + line);
+				html = WebPageDownloader.down("www.88nini.com", "/view/" + line);
 			} catch (Exception e) {
 				e.printStackTrace();
 				continue;
 			}
-			dao.save(new Movie("www.611zy.com" + "/view/" + line,
+			dao.save(new Movie("www.88nini.com" + "/view/" + line,
 					titleProcess(html), qvodProcess(html),
 					categoryProcess(html)));
 		}
@@ -48,7 +48,7 @@ public class CategoryCrawler {
 
 	private String titleProcess(String html) {
 		String title = "";
-		String regex = "<h1>(.*?)</h1>";
+		String regex = "<li class=\"title\">(.*?)</li>";
 		Pattern pt = Pattern.compile(regex);
 		Matcher mt = pt.matcher(html);
 		while (mt.find()) {
@@ -59,7 +59,7 @@ public class CategoryCrawler {
 
 	private String categoryProcess(String html) {
 		String category = "";
-		String regex = "<p>所属分类：(.*?)</p>";
+		String regex = "<strong>(.*?)</strong>";
 		Pattern pt = Pattern.compile(regex);
 		Matcher mt = pt.matcher(html);
 		while (mt.find()) {

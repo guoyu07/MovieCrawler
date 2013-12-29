@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Random;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -92,6 +94,18 @@ public class MovieDAO implements Closeable{
 			e.printStackTrace();
 		}
 		return set;
+	}
+	
+	public Set<Movie> getRadomMovies() throws IOException{
+		Set<Movie> set = getMovies();
+		Set<Movie> resuleset = new HashSet<Movie>();
+		LinkedList<Movie> list = new LinkedList<Movie>(set);
+		for (int i = 0; i < 18; i++) {
+			Movie m  = list.remove(new Random().nextInt(set.size()));
+			resuleset.add(m);
+		}
+		return resuleset;
+		
 	}
 	
 

@@ -1,5 +1,7 @@
 package com.gs.DAO;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +11,7 @@ import org.apache.log4j.Logger;
 
 import com.gs.model.User;
 
-public class UserDAO {
+public class UserDAO implements Closeable{
 	private Logger logger = Logger.getLogger(this.getClass());
 	private Connection connection;
 	public UserDAO(){
@@ -50,6 +52,14 @@ public class UserDAO {
 			e.printStackTrace();
 		}
 		return (count == 0) ? false : true;
+	}
+	@Override
+	public void close() throws IOException {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

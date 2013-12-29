@@ -28,21 +28,25 @@ public class Server {
 	private Logger logger = Logger.getLogger(this.getClass());
 	private JTextArea textArea;
 	private static final Searcher searcher = new Searcher();
+	private ServerSocket ss = null;
+	private MovieDAO dao = new MovieDAO();
+	private UserDAO userDAO = new UserDAO();
 
 	public void setTextArea(JTextArea textArea) {
 		this.textArea = textArea;
 	}
 
 	public void start() throws JsonSyntaxException, IOException, Exception {
-		ServerSocket ss = null;
 		Socket socket = null;
 		try {
 			ss = new ServerSocket(8888);
-			MovieDAO dao = new MovieDAO();
-			UserDAO userDAO = new UserDAO();
 			while (true) {
 				// 服务器接收到客户端的数据后，创建与此客户端对话的Socket
-				socket = ss.accept();
+				try {
+					socket = ss.accept();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				// 用于向客户端发送数据的输出流
 				textArea.append(socket.getInetAddress().getHostAddress()
 						+ "已连接\n");
@@ -67,10 +71,10 @@ public class Server {
 				System.out.println(dto.getJsonClassName());
 				if (dto.getJsonClassName().equals(
 						"com.gs.socket.request.SearchRequest")) {
-					System.out.println("SearchRequset");
 					try {
 						searchreq = (SearchRequest) RequestDTOProcesser
 								.unpack(dto);
+						textArea.append(searchreq.toString());
 					} catch (Exception e) {
 						String err = e.getMessage() + " 用户名:"
 								+ dto.getProperty().getUsername() + " IP:"
@@ -80,7 +84,7 @@ public class Server {
 						textArea.append(err);
 						dos.writeUTF(new Gson().toJson(new Response("Forbiden",
 								403)));
-						break;
+						continue;
 					}
 					LinkedList<Movie> list = new LinkedList<Movie>();
 					for (Movie m : searcher.search(searchreq.getQueryString(),
@@ -91,7 +95,6 @@ public class Server {
 							.toJson(list), 200)));
 				} else if (dto.getJsonClassName().equals(
 						"com.gs.socket.request.RegistRequest")) {
-					System.out.println("RegistRequest");
 					try {
 						registreq = (RegistRequest) RequestDTOProcesser
 								.unpack(dto);
@@ -104,10 +107,14 @@ public class Server {
 							+ " Port:" + socket.getPort() + "\n");
 					dos.writeUTF(new Gson().toJson(new Response("请等待服务器通过注册申请",
 							403)));
+				}else if(dto.getJsonClassName().equals(
+						"com.gs.socket.request.RecommendRequest")){
+					textArea.append(dto.getProperty().getUsername()+"每日推荐");
+					dos.writeUTF(new Gson().toJson(new Response(new Gson()
+					.toJson(dao.getRadomMovies()), 200)));
 				}
+				//socket.close();
 			}
-			// 不需要继续使用此连接时，关闭连接
-			socket.close();
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
@@ -124,5 +131,11 @@ public class Server {
 			socket.close();
 			ss.close();
 		}
+	}
+	
+	public void stop() throws IOException{
+		ss.close();
+		dao.close();
+		userDAO.close();
 	}
 }
