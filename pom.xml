@@ -87,5 +87,10 @@
         	<artifactId>lucene-core</artifactId>
         	<version>3.5.0</version>
         </dependency>
+        <dependency>
+        	<groupId>org.eclipse.jetty</groupId>
+        	<artifactId>jetty-server</artifactId>
+        	<version>9.1.0.RC2</version>
+        </dependency>
 	</dependencies>
 </project>

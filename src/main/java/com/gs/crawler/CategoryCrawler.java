@@ -14,7 +14,7 @@ import com.gs.model.Movie;
 public class CategoryCrawler {
 	public void crawl() throws IOException{
 		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"D://Test//zhifu.data")));
+				"D://Test//yazhou.data")));
 		String line;
 		MovieDAO dao = new MovieDAO();
 		int i = 0;

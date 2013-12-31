@@ -26,15 +26,15 @@ import com.gs.model.Movie;
 
 public class TestDownloader {
 
-	@Test
+	@Test//6sw-69 5qj-31 1yz-406
 	public void test1() throws UnknownHostException, IOException {
-		String strServer = "www.611zy.com";//TODO
+		String strServer = "";//TODO
 		FileWriter fw = null;
 		// 起始页面，/为根页
 		try {
-			File file = new File("D://Test//linglei.data");
+			File file = new File("D://Test//.data");
 			fw = new FileWriter(file, true);
-			for (int i = 2; i <= 28; i++) {
+			for (int i = 1; i <= 406; i++) {
 				// 设置端口，通常http端口不就是80罗，你在地址栏上没输就是这个值
 				int port = 80;
 				// 用域名反向获得IP地址
@@ -45,7 +45,7 @@ public class TestDownloader {
 				// 发送命令,无非就是在Socket发送流的基础上加多一些握手信息，详情请了解HTTP协议
 				wr = new BufferedWriter(new OutputStreamWriter(
 						socket.getOutputStream(), "utf8"));
-				String strPage = "/list/index8_" + String.valueOf(i) + ".html";
+				String strPage = "/vodlist/1_" + String.valueOf(i) + ".html";
 				System.out.println(strPage);
 				wr.write("GET " + strPage + " HTTP/1.0\r\n");
 				wr.write("HOST:" + strServer + "\r\n");
@@ -58,7 +58,7 @@ public class TestDownloader {
 				String line;
 				StringBuffer sb = new StringBuffer();
 				while ((line = dis.readLine()) != null) {
-					sb.append(new String(line.getBytes("iso8859-1"), "gb2312"));
+					sb.append(new String(line.getBytes("iso8859-1"), "utf8"));
 				}
 				for (String u : process(sb.toString())) {
 					fw.write(u + "\r");
@@ -77,11 +77,13 @@ public class TestDownloader {
 
 	public Set<String> process(String html) {
 		Set<String> set = new HashSet<String>();
-		String regex = "<a href=\"/view/(.*?)\" title=\".*?\" target=\"_blank\">";
+		String regex = "<a href=\"/vod/(.*?)\"(.*?)target=\"_blank\">";
 		Pattern pt = Pattern.compile(regex);
 		Matcher mt = pt.matcher(html);
 		while (mt.find()) {
 			String u = mt.group(1);
+			u += mt.group(2);
+			//System.out.println(u);
 			set.add(u);
 		}
 		return set;
@@ -124,6 +126,30 @@ public class TestDownloader {
 	public void testCategoryCrawler() throws IOException{
 		CategoryCrawler c = new CategoryCrawler();
 		c.crawl();
+	}
+	
+	@Test
+	public void testDownLoader() throws IOException{
+		System.out.println(WebPageDownloader.down("www..com", "/vodlist/2_1.html"));
+	}
+	
+	@Test
+	public void testDAO() throws IOException{
+		MovieDAO d = new MovieDAO();
+		BufferedReader br = new BufferedReader(new FileReader(new File("D://Test//.data")));
+		String line;
+		while((line = br.readLine())!=null){
+			String[] ss = line.split(" ");
+			String regex = "\"(.*?)\"";
+			Pattern pt = Pattern.compile(regex);
+			Matcher mt = pt.matcher(line);
+			if (mt.find()) {
+				System.out.println(new Movie("www..com/vod/"+ss[0],mt.group(1),"",""));
+				d.save(new Movie("www.yeyelu.com/vod/"+ss[0],mt.group(1),"",""));//http://www.yeyelu.com/vod/29504.html
+			}
+		}
+		br.close();
+		d.close();
 	}
 
 	

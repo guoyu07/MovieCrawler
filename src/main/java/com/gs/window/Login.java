@@ -12,6 +12,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -50,13 +52,13 @@ public class Login extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			textField = new JTextField();
-			textField.setBounds(150, 39, 66, 21);
+			textField.setBounds(150, 39, 137, 21);
 			contentPanel.add(textField);
 			textField.setColumns(10);
 		}
 		{
 			textField_1 = new JTextField();
-			textField_1.setBounds(150, 113, 66, 21);
+			textField_1.setBounds(150, 113, 137, 21);
 			contentPanel.add(textField_1);
 			textField_1.setColumns(10);
 		}
@@ -87,9 +89,14 @@ public class Login extends JDialog {
 								c.setTextArea(textArea);
 								Response resp = null;
 								try {
-									resp = c.post(new SearchRequest("Login"),
+									resp = c.post(new SearchRequest("Login",1),
 											textField_1.getText());
-								} catch (IOException e) {
+								}catch(ConnectException e){
+									JOptionPane.showMessageDialog(null, "未开启服务器");
+								} catch (UnknownHostException e) {
+									JOptionPane.showMessageDialog(null, "无法识别的服务器IP");
+								}
+								catch (IOException e) {
 									e.printStackTrace();
 								}
 								if (resp.getStatusCode() == 200) {
@@ -108,7 +115,7 @@ public class Login extends JDialog {
 									dialog.setVisible(false);
 								} else {
 									JOptionPane.showMessageDialog(null,
-											"无法通过身份验证,请重试");
+											"非法登录,无法通过身份验证");
 									System.exit(ERROR);
 								}
 

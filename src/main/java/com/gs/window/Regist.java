@@ -27,7 +27,6 @@ public class Regist extends JDialog {
 	public static void main(String[] args) {
 		try {
 			Regist dialog = new Regist();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -45,13 +44,13 @@ public class Regist extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			textField = new JTextField();
-			textField.setBounds(158, 37, 66, 21);
+			textField.setBounds(158, 37, 157, 21);
 			contentPanel.add(textField);
 			textField.setColumns(10);
 		}
 		{
 			textField_1 = new JTextField();
-			textField_1.setBounds(158, 113, 66, 21);
+			textField_1.setBounds(158, 113, 157, 21);
 			contentPanel.add(textField_1);
 			textField_1.setColumns(10);
 		}
@@ -101,7 +100,7 @@ public class Regist extends JDialog {
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						System.exit(ABORT);
+						setVisible(false);
 					}
 				});
 				cancelButton.setActionCommand("Cancel");

@@ -2,25 +2,31 @@ package com.gs.socket.request;
 
 public class SearchRequest implements Request{
 	private String queryString;
-	
-	public SearchRequest(String queryString) {
-		this.queryString = queryString;
-	}
-
+	private int max;
 	public String getQueryString() {
 		return queryString;
 	}
-
 	public void setQueryString(String queryString) {
 		this.queryString = queryString;
 	}
-
+	public int getMax() {
+		return max;
+	}
+	public void setMax(int max) {
+		this.max = max;
+	}
+	public SearchRequest(String queryString, int max) {
+		super();
+		this.queryString = queryString;
+		this.max = max;
+	}
 	@Override
 	public String toString() {
-		return "SearchRequset ["
-				+ (queryString != null ? "queryString=" + queryString : "")
-				+ "]";
+		return "SearchRequest ["
+				+ (queryString != null ? "queryString=" + queryString + ", "
+						: "") + "max=" + max + "]";
 	}
+	
 
 	
 

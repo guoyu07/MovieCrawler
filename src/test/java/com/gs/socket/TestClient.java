@@ -26,11 +26,6 @@ public class TestClient {
 		System.out.println(property + ": " + serial);
 	}
 	
-	@Test
-	public void test1() throws IOException{
-		Client c = new Client();
-		c.post(new SearchRequest("中出"), "gaoshen");
-	}
 	
 	@Test
 	public void test(){

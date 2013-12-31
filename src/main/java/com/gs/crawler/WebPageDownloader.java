@@ -39,6 +39,6 @@ public class WebPageDownloader {
 		br.close();
 		wr.close();
 		socket.close();
-		return new String(sb.toString().getBytes("iso8859_1"),"gb2312");
+		return new String(sb.toString().getBytes("iso8859-1"),"gb2312");
 	}
 }

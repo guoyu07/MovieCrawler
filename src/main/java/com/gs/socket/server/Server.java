@@ -68,13 +68,12 @@ public class Server {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				System.out.println(dto.getJsonClassName());
 				if (dto.getJsonClassName().equals(
 						"com.gs.socket.request.SearchRequest")) {
 					try {
 						searchreq = (SearchRequest) RequestDTOProcesser
 								.unpack(dto);
-						textArea.append(searchreq.toString());
+						textArea.append(searchreq.toString()+"\n");
 					} catch (Exception e) {
 						String err = e.getMessage() + " 用户名:"
 								+ dto.getProperty().getUsername() + " IP:"
@@ -88,7 +87,7 @@ public class Server {
 					}
 					LinkedList<Movie> list = new LinkedList<Movie>();
 					for (Movie m : searcher.search(searchreq.getQueryString(),
-							100)) {
+							searchreq.getMax())) {
 						list.add(dao.getMovie(m.getUrl()));
 					}
 					dos.writeUTF(new Gson().toJson(new Response(new Gson()
@@ -113,7 +112,6 @@ public class Server {
 					dos.writeUTF(new Gson().toJson(new Response(new Gson()
 					.toJson(dao.getRadomMovies()), 200)));
 				}
-				//socket.close();
 			}
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -133,9 +131,10 @@ public class Server {
 		}
 	}
 	
-	public void stop() throws IOException{
-		ss.close();
-		dao.close();
-		userDAO.close();
+	public void stop(){
+		try {
+			ss.close();
+		} catch (IOException e) {
+		}
 	}
 }

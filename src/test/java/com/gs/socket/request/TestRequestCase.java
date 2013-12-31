@@ -12,7 +12,7 @@ public class TestRequestCase {
 
 	@Test
 	public void test() throws JsonSyntaxException, ClassNotFoundException {
-		RequestDTO dto = RequestDTOProcesser.pack(new SearchRequest("HaHa"), new RequestProperty(getCPUID(), "gaoshen"));
+		RequestDTO dto = RequestDTOProcesser.pack(new SearchRequest("HaHa",1), new RequestProperty(getCPUID(), "gaoshen"));
 		System.out.println(dto);
 		try {
 			System.out.println(RequestDTOProcesser.unpack(dto));

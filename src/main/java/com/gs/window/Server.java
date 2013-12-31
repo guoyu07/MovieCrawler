@@ -74,11 +74,7 @@ public class Server {
 		JButton btnStop = new JButton("Stop");
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					s.stop();
-				} catch (IOException e) {
-					textArea.append(e.getMessage());
-				}
+				s.stop();
 			}
 		});
 		btnStop.setBounds(244, 10, 93, 23);

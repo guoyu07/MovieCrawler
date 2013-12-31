@@ -55,9 +55,11 @@ public class Client {
 			textArea.append("关闭与服务器的通信\n");
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
+			textArea.append(e.getMessage());
 			throw e;
 		} catch (IOException e) {
 			e.printStackTrace();
+			textArea.append(e.getMessage());
 			throw e;
 		}
 		return resp;
@@ -72,6 +74,7 @@ public class Client {
 			process.getOutputStream().close();
 			sc = new Scanner(process.getInputStream());
 		} catch (IOException e) {
+			textArea.append(e.getMessage());
 			e.printStackTrace();
 		}
 		sc.next();
@@ -80,7 +83,7 @@ public class Client {
 		return serial;
 	}
 	
-	public static String getMotherboardSN() {
+	public String getMotherboardSN() {
 		  String result = "";
 		    try {
 		      File file = File.createTempFile("realhowto",".vbs");
@@ -107,6 +110,7 @@ public class Client {
 		      input.close();
 		    }
 		    catch(Exception e){
+		    	textArea.append(e.getMessage());
 		        e.printStackTrace();
 		    }
 		    return result.trim();
